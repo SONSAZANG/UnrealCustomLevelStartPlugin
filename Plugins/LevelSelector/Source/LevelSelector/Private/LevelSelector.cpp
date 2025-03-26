@@ -18,13 +18,6 @@ void FLevelSelectorModule::StartupModule()
 	FLevelSelectorStyle::ReloadTextures();
 
 	FLevelSelectorCommands::Register();
-	
-	PluginCommands = MakeShareable(new FUICommandList);
-
-	PluginCommands->MapAction(
-		FLevelSelectorCommands::Get().PluginAction,
-		FExecuteAction::CreateRaw(this, &FLevelSelectorModule::PluginButtonClicked),
-		FCanExecuteAction());
 
 	UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FLevelSelectorModule::RegisterMenus));
 }
@@ -40,27 +33,10 @@ void FLevelSelectorModule::ShutdownModule()
 	FLevelSelectorCommands::Unregister();
 }
 
-void FLevelSelectorModule::PluginButtonClicked()
-{
-	// Put your "OnButtonClicked" stuff here
-	FText DialogText = FText::Format(
-							LOCTEXT("PluginButtonDialogText", "Add code to {0} in {1} to override this button's actions"),
-							FText::FromString(TEXT("FLevelSelectorModule::PluginButtonClicked()")),
-							FText::FromString(TEXT("LevelSelector.cpp"))
-					   );
-	FMessageDialog::Open(EAppMsgType::Ok, DialogText);
-}
-
 void FLevelSelectorModule::RegisterMenus()
 {
 	// Owner will be used for cleanup in call to UToolMenus::UnregisterOwner
 	FToolMenuOwnerScoped OwnerScoped(this);
-
-	UToolMenu* Menu = UToolMenus::Get()->ExtendMenu("LevelEditor.MainMenu.Window");
-	{
-		FToolMenuSection& Section = Menu->FindOrAddSection("WindowLayout");
-		Section.AddMenuEntryWithCommandList(FLevelSelectorCommands::Get().PluginAction, PluginCommands);
-	}
 
 	UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar.PlayToolBar"); 
 	{
@@ -97,7 +73,7 @@ TSharedRef<SWidget> FLevelSelectorModule::GenerateDropdownMenu()
 	const FString MapsDir = FPaths::ProjectContentDir() + TEXT("Maps/");
 	IFileManager::Get().FindFilesRecursive(MapNames, *MapsDir, TEXT("*.umap"), true, false);
 
-	FMenuBuilder MenuBuilder(true, PluginCommands);
+	FMenuBuilder MenuBuilder(true, nullptr);
 
 	for (const FString& MapPath : MapNames)
 	{

@@ -14,7 +14,6 @@ public:
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 	
-	void PluginButtonClicked();
 	TSharedRef<SWidget> GenerateDropdownMenu();
 	FString SelectedMapName;
 	void OnLevelSelected(FString LevelName);
