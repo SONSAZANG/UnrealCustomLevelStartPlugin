@@ -69,10 +69,15 @@ void FLevelSelectorModule::RegisterMenus()
 			"LevelSelectorDropdown",
 			FUIAction(),
 			FOnGetContent::CreateRaw(this, &FLevelSelectorModule::GenerateDropdownMenu),
-			LOCTEXT("LevelSelectorDropdown_Label", "Level Selector"),
+			TAttribute<FText>::Create([this]() {
+				return SelectedMapName.IsEmpty()
+					? FText::FromString(TEXT("Level Selector"))
+					: FText::FromString(FString::Printf(TEXT("[ %s ]"), *SelectedMapName));
+			}),
 			LOCTEXT("LevelSelectorDropdown_Tooltip", "Select a level to open"),
-			FSlateIcon(FLevelSelectorStyle::GetStyleSetName(), "LevelSelector.Icon")
+			FSlateIcon(FAppStyle::GetAppStyleSetName(), "Icons.Level")
 		);
+		DropdownEntry.StyleNameOverride = "CalloutToolbar";
 		Section.AddEntry(DropdownEntry);
 
 		FToolMenuEntry PlayButtonEntry = FToolMenuEntry::InitToolBarButton(
