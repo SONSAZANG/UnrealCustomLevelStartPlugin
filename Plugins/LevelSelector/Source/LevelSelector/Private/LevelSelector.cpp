@@ -61,7 +61,7 @@ void FLevelSelectorModule::RegisterMenus()
 	UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar.PlayToolBar"); 
 	{
 		FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("PluginTools");
-		FToolMenuEntry Entry = FToolMenuEntry::InitComboButton(
+		FToolMenuEntry DropdownEntry = FToolMenuEntry::InitComboButton(
 			"LevelSelectorDropdown",
 			FUIAction(),
 			FOnGetContent::CreateRaw(this, &FLevelSelectorModule::GenerateDropdownMenu),
@@ -69,9 +69,17 @@ void FLevelSelectorModule::RegisterMenus()
 			LOCTEXT("LevelSelectorDropdown_Tooltip", "Select a level to open"),
 			FSlateIcon(FLevelSelectorStyle::GetStyleSetName(), "LevelSelector.Icon")
 		);
-		Section.AddEntry(Entry);
+		Section.AddEntry(DropdownEntry);
+
+		FToolMenuEntry PlayButtonEntry = FToolMenuEntry::InitToolBarButton(
+			"PlaySelectedLevel",
+			FUIAction(FExecuteAction::CreateRaw(this, &FLevelSelectorModule::OnPlayClicked)),
+			LOCTEXT("PlayLevel_Label", "Play Level"),
+			LOCTEXT("PlayLevel_Tooltip", "Play selected level"),
+			FSlateIcon(FAppStyle::GetAppStyleSetName(), "Icons.Play")
+		);
+		Section.AddEntry(PlayButtonEntry);
 	}
-	
 }
 
 TSharedRef<SWidget> FLevelSelectorModule::GenerateDropdownMenu()
@@ -92,20 +100,6 @@ TSharedRef<SWidget> FLevelSelectorModule::GenerateDropdownMenu()
 			FUIAction(FExecuteAction::CreateRaw(this, &FLevelSelectorModule::OnLevelSelected, NameOnly))
 		);
 	}
-
-	/*MenuBuilder.AddMenuEntry(
-		LOCTEXT("Level1", "Open Level 1"),
-		LOCTEXT("Level1_Tooltip", "Opens Level 1"),
-		FSlateIcon(),
-		FUIAction(FExecuteAction::CreateRaw(this, &FLevelSelectorModule::OnOpenLevel1))
-	);
-	MenuBuilder.AddMenuEntry(
-		LOCTEXT("Level2", "Open Level 2"),
-		LOCTEXT("Level2_Tooltip", "Opens Level 2"),
-		FSlateIcon(),
-		FUIAction(FExecuteAction::CreateRaw(this, &FLevelSelectorModule::OnOpenLevel2))
-	);*/
-
 	return MenuBuilder.MakeWidget();
 }
 
@@ -115,14 +109,9 @@ void FLevelSelectorModule::OnLevelSelected(FString LevelName)
 	UE_LOG(LogTemp, Log, TEXT("Selected Level: %s"), *LevelName);
 }
 
-void FLevelSelectorModule::OnOpenLevel1()
+void FLevelSelectorModule::OnPlayClicked()
 {
-	UE_LOG(LogTemp, Log, TEXT("Level 1 선택됨"));
-}
-
-void FLevelSelectorModule::OnOpenLevel2()
-{
-	UE_LOG(LogTemp, Log, TEXT("Level 2 선택됨"));
+	UE_LOG(LogTemp, Log, TEXT("OnPlayClicked: %s"), *SelectedMapName);
 }
 
 #undef LOCTEXT_NAMESPACE

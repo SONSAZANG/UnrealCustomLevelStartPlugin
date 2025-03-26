@@ -18,9 +18,7 @@ public:
 	TSharedRef<SWidget> GenerateDropdownMenu();
 	FString SelectedMapName;
 	void OnLevelSelected(FString LevelName);
-	void OnOpenLevel1();
-	void OnOpenLevel2();
-
+	void OnPlayClicked();
 private:
 
 	void RegisterMenus();
