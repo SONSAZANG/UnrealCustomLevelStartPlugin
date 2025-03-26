@@ -1,7 +1,11 @@
 ﻿#include "LevelSelector.h"
 #include "LevelSelectorStyle.h"
 #include "LevelSelectorCommands.h"
+#include "LevelEditor.h"
 #include "Misc/MessageDialog.h"
+#include "FileHelpers.h"
+#include "UnrealEdGlobals.h"
+#include "Editor/UnrealEdEngine.h"
 #include "ToolMenus.h"
 
 static const FName LevelSelectorTabName("LevelSelector");
@@ -111,6 +115,30 @@ void FLevelSelectorModule::OnLevelSelected(FString LevelName)
 
 void FLevelSelectorModule::OnPlayClicked()
 {
+	if (SelectedMapName.IsEmpty())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No Level Selected!"));
+	}
+
+	const FString MapPath = FString::Printf(TEXT("/Game/Maps/%s"), *SelectedMapName);
+	if (!FPackageName::DoesPackageExist(MapPath))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Map does not exist : %s"), *SelectedMapName);
+	}
+
+	UEditorLoadingAndSavingUtils::LoadMap(MapPath);
+	
+	FLevelEditorModule &LevelEditorModule = FModuleManager::GetModuleChecked<FLevelEditorModule>(TEXT("LevelEditor"));
+	TSharedPtr<IAssetViewport> ActiveLevelViewport = LevelEditorModule.GetFirstActiveViewport();
+
+	if (GUnrealEd)
+	{
+		FRequestPlaySessionParams Params;
+		Params.WorldType = EPlaySessionWorldType::PlayInEditor;
+		Params.SessionDestination = EPlaySessionDestinationType::InProcess;
+		Params.DestinationSlateViewport = ActiveLevelViewport;
+		GUnrealEd->RequestPlaySession(Params);
+	}
 	UE_LOG(LogTemp, Log, TEXT("OnPlayClicked: %s"), *SelectedMapName);
 }
 
