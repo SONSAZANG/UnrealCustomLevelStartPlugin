@@ -1,4 +1,6 @@
-﻿#include "LevelSelector.h"
+﻿// Copyright (c) 2025 SONSAZANG. All Rights Reserved.
+
+#include "LevelSelector.h"
 #include "LevelSelectorStyle.h"
 #include "LevelSelectorCommands.h"
 #include "LevelEditor.h"
