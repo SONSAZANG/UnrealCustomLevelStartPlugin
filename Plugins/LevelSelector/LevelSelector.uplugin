@@ -8,6 +8,7 @@
 	"CreatedBy": "",
 	"CreatedByURL": "",
 	"DocsURL": "",
+	"FabURL": "com.epicgames.launcher://ue/Fab/product/052be8a6-ccd4-4042-98c6-56de36741d43",
 	"MarketplaceURL": "",
 	"SupportURL": "",
 	"CanContainContent": false,
@@ -18,7 +19,8 @@
 		{
 			"Name": "LevelSelector",
 			"Type": "Editor",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"PlatformAllowList": [ "Win64", "Mac" ] 
 		}
 	]
 }
