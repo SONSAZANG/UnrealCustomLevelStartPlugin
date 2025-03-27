@@ -25,7 +25,7 @@
 
 ## 🛠️ 설치 및 설정
 ### 1. 플러그인 설치 Plugins 폴더에 복사
-https://drive.google.com/drive/folders/1gcyKnJf0xdnLCAhqgKs6I4DUk2O8l4fY?usp=drive_link
+[Level Selector Google Drive Link](https://drive.google.com/file/d/1Ux5u92xQaQ-p97e6jQ8GNNgVBN3DT9If/view?usp=sharing) <br>
 YourProject/Plugins/LevelSelector/
 
 ### 2. `.uproject` 열고 플러그인 활성화  
